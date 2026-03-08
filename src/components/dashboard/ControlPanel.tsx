@@ -1,21 +1,12 @@
 import { motion } from "framer-motion";
 import { Zap } from "lucide-react";
-import { useState } from "react";
 
-const ControlPanel = () => {
-  const [running, setRunning] = useState(false);
+interface ControlPanelProps {
+  onRun: () => void;
+  loading: boolean;
+}
 
-  const handleRun = async () => {
-    setRunning(true);
-    // Simulate pipeline execution
-    setTimeout(() => setRunning(false), 8000);
-    try {
-      await fetch("http://localhost:8000/run-demo", { method: "POST" });
-    } catch {
-      // Backend not available — dashboard runs in demo mode
-    }
-  };
-
+const ControlPanel = ({ onRun, loading }: ControlPanelProps) => {
   return (
     <motion.section
       initial={{ opacity: 0, y: 20 }}
@@ -28,11 +19,11 @@ const ControlPanel = () => {
       </h2>
 
       <motion.button
-        onClick={handleRun}
-        disabled={running}
-        whileHover={!running ? { scale: 1.05 } : {}}
-        whileTap={!running ? { scale: 0.95 } : {}}
-        animate={running ? {
+        onClick={onRun}
+        disabled={loading}
+        whileHover={!loading ? { scale: 1.05 } : {}}
+        whileTap={!loading ? { scale: 0.95 } : {}}
+        animate={loading ? {
           boxShadow: [
             "0 0 20px hsl(220 90% 56% / 0.4), 0 0 60px hsl(270 70% 55% / 0.2)",
             "0 0 40px hsl(220 90% 56% / 0.7), 0 0 80px hsl(270 70% 55% / 0.4)",
@@ -41,20 +32,20 @@ const ControlPanel = () => {
         } : {
           boxShadow: "0 0 20px hsl(220 90% 56% / 0.3), 0 0 40px hsl(270 70% 55% / 0.15)",
         }}
-        transition={running ? { duration: 1.5, repeat: Infinity } : {}}
+        transition={loading ? { duration: 1.5, repeat: Infinity } : {}}
         className={`px-10 py-5 rounded-xl font-display text-base font-bold tracking-wider border transition-all ${
-          running
+          loading
             ? 'bg-primary/30 border-primary/50 text-primary cursor-wait'
             : 'bg-gradient-to-r from-primary/20 to-secondary/20 border-primary/40 text-foreground hover:border-primary/60'
         }`}
       >
         <span className="flex items-center gap-3">
-          <Zap className={`w-5 h-5 ${running ? 'animate-pulse-neon text-primary' : 'text-neon-cyan'}`} />
-          {running ? "Executing Pipeline..." : "Run Secure IoT Transmission"}
+          <Zap className={`w-5 h-5 ${loading ? 'animate-pulse-neon text-primary' : 'text-neon-cyan'}`} />
+          {loading ? "Encrypting IoT Data and Broadcasting Transaction..." : "Run Secure IoT Transmission"}
         </span>
       </motion.button>
 
-      {running && (
+      {loading && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
