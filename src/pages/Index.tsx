@@ -1,12 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import NavHeader from "@/components/dashboard/NavHeader";
 import IoTNetworkMap from "@/components/dashboard/IoTNetworkMap";
-import ClusterHeadSelection from "@/components/dashboard/ClusterHeadSelection";
-import ConsensusProtocol from "@/components/dashboard/ConsensusProtocol";
 import EncryptionEngine from "@/components/dashboard/EncryptionEngine";
 import BlockchainLog from "@/components/dashboard/BlockchainLog";
-import SystemConsole from "@/components/dashboard/SystemConsole";
 import ControlPanel from "@/components/dashboard/ControlPanel";
 
 interface EncryptedData {
@@ -39,36 +36,23 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background grid-bg relative">
-      <div className="scan-line fixed inset-0 pointer-events-none z-50 h-[200%]" />
-      <div className="relative z-10 max-w-7xl mx-auto p-4 md:p-6 space-y-6">
-        <DashboardHeader />
-
+    <div className="min-h-screen bg-background">
+      <NavHeader />
+      <div className="max-w-7xl mx-auto p-6 space-y-6">
         {error && (
-          <div className="glass-panel border-destructive/50 bg-destructive/10 p-4 text-destructive font-mono text-sm">
+          <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 text-destructive text-sm">
             {error}
           </div>
         )}
 
-        {/* Top Row */}
+        <ControlPanel onRun={runDemo} loading={loading} />
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <IoTNetworkMap />
-          <ClusterHeadSelection />
-        </div>
-
-        {/* Second Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <ConsensusProtocol />
           <EncryptionEngine encryptedData={encryptedData} loading={loading} />
         </div>
 
-        {/* Third Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <SystemConsole />
-          <BlockchainLog txHash={txHash} />
-        </div>
-
-        <ControlPanel onRun={runDemo} loading={loading} />
+        <BlockchainLog txHash={txHash} />
       </div>
     </div>
   );
