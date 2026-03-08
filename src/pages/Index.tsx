@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import NavHeader from "@/components/dashboard/NavHeader";
 import IoTNetworkMap from "@/components/dashboard/IoTNetworkMap";
+import ClusterHeadSelection from "@/components/dashboard/ClusterHeadSelection";
+import ConsensusProtocol from "@/components/dashboard/ConsensusProtocol";
 import EncryptionEngine from "@/components/dashboard/EncryptionEngine";
 import BlockchainLog from "@/components/dashboard/BlockchainLog";
 import ControlPanel from "@/components/dashboard/ControlPanel";
@@ -49,6 +51,11 @@ const Index = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <IoTNetworkMap />
+          <ClusterHeadSelection />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ConsensusProtocol />
           <EncryptionEngine encryptedData={encryptedData} loading={loading} />
         </div>
 
