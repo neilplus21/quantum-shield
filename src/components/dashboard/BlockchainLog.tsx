@@ -8,7 +8,6 @@ interface BlockchainLogProps {
 
 const BlockchainLog = ({ txHash }: BlockchainLogProps) => {
   const [copied, setCopied] = useState(false);
-  const etherscanUrl = txHash ? `https://sepolia.etherscan.io/tx/${txHash}` : null;
 
   const copyHash = async () => {
     if (!txHash) return;
@@ -21,28 +20,22 @@ const BlockchainLog = ({ txHash }: BlockchainLogProps) => {
     <motion.section
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3 }}
       className="bg-card border border-border rounded-lg p-6 shadow-sm"
     >
-      <h2 className="text-lg font-semibold text-foreground mb-4">
-        Blockchain Transaction
-      </h2>
+      <h2 className="text-lg font-semibold text-foreground mb-4">Blockchain Logging</h2>
 
       {txHash ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-          {/* Status */}
           <div className="flex items-center gap-2">
             <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
             <span className="text-sm text-green-400">Transaction Confirmed</span>
           </div>
 
-          {/* Network */}
           <div>
             <div className="text-xs text-muted-foreground mb-1">Network</div>
             <div className="text-sm text-foreground">Ethereum Sepolia</div>
           </div>
 
-          {/* Hash */}
           <div>
             <div className="text-xs text-muted-foreground mb-1">Transaction Hash</div>
             <div className="font-mono text-xs text-primary bg-background rounded p-3 border border-border break-all">
@@ -50,7 +43,6 @@ const BlockchainLog = ({ txHash }: BlockchainLogProps) => {
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="flex gap-3">
             <button
               onClick={copyHash}
@@ -60,7 +52,7 @@ const BlockchainLog = ({ txHash }: BlockchainLogProps) => {
               {copied ? "Copied!" : "Copy Hash"}
             </button>
             <a
-              href={etherscanUrl!}
+              href={`https://sepolia.etherscan.io/tx/${txHash}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
