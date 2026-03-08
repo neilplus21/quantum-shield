@@ -1,93 +1,66 @@
-import { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import NavHeader from "@/components/dashboard/NavHeader";
 import PipelineTracker from "@/components/dashboard/PipelineTracker";
-import ScatteredDevices from "@/components/dashboard/ScatteredDevices";
-import NeighborDiscovery from "@/components/dashboard/NeighborDiscovery";
-import ClusterHeadSelection from "@/components/dashboard/ClusterHeadSelection";
-import DataAggregation from "@/components/dashboard/DataAggregation";
-import ConsensusProtocol from "@/components/dashboard/ConsensusProtocol";
-import EncryptionEngine from "@/components/dashboard/EncryptionEngine";
-import BlockchainLog from "@/components/dashboard/BlockchainLog";
-import ControlPanel from "@/components/dashboard/ControlPanel";
+import { Play, Radio, GitBranch, Vote, Lock, ArrowRight } from "lucide-react";
 
-interface EncryptedData {
-  ciphertext: string;
-  iv: string;
-  tag: string;
-  kem_ciphertext: string;
-}
+const actions = [
+  { label: "Play Full Demo", description: "Run the entire pipeline automatically", path: "/demo", icon: Play },
+  { label: "Explore IoT Network", description: "View scattered devices and neighbor discovery", path: "/iot-network", icon: Radio },
+  { label: "Explore Clustering", description: "Cluster head selection and data aggregation", path: "/clustering", icon: GitBranch },
+  { label: "Explore Consensus", description: "Extended DPoL consensus protocol", path: "/consensus", icon: Vote },
+  { label: "Encryption & Blockchain", description: "Post-quantum encryption and blockchain logging", path: "/encryption", icon: Lock },
+];
 
 const Index = () => {
-  const [txHash, setTxHash] = useState<string | null>(null);
-  const [encryptedData, setEncryptedData] = useState<EncryptedData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [pipelineStage, setPipelineStage] = useState(-1);
-
-  const runDemo = async () => {
-    setLoading(true);
-    setError(null);
-    setTxHash(null);
-    setEncryptedData(null);
-
-    // Animate through stages
-    for (let i = 0; i <= 4; i++) {
-      setPipelineStage(i);
-      await new Promise((r) => setTimeout(r, 1500));
-    }
-
-    // Stage 5: Encryption (API call)
-    setPipelineStage(5);
-    try {
-      const res = await axios.post("http://127.0.0.1:8000/run-demo");
-      const { encrypted_payload, tx_hash } = res.data;
-      const parsed: EncryptedData = JSON.parse(encrypted_payload);
-      setEncryptedData(parsed);
-
-      // Stage 6: Blockchain with delay
-      setPipelineStage(6);
-      await new Promise((r) => setTimeout(r, 4000));
-      setTxHash(tx_hash);
-    } catch {
-      setError("Failed to execute secure IoT transmission.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background">
       <NavHeader />
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
-        {error && (
-          <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 text-destructive text-sm">
-            {error}
-          </div>
-        )}
+      <div className="max-w-5xl mx-auto px-6 py-10 space-y-10">
+        {/* Hero */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center space-y-4"
+        >
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
+            Quantum Secure IoT Blockchain System
+          </h1>
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Distributed IoT security architecture using clustering, consensus, post-quantum encryption, and blockchain logging.
+          </p>
+        </motion.div>
 
-        <PipelineTracker activeStage={pipelineStage} />
-        <ControlPanel onRun={runDemo} loading={loading} />
+        {/* Pipeline overview */}
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+          <p className="text-xs text-muted-foreground mb-3 text-center">Architecture Pipeline</p>
+          <PipelineTracker activeStage={-1} />
+        </motion.div>
 
-        {/* Row 1: IoT Devices | Neighbor Discovery */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <ScatteredDevices />
-          <NeighborDiscovery />
-        </div>
-
-        {/* Row 2: Cluster Head Selection | Data Aggregation */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <ClusterHeadSelection />
-          <DataAggregation />
-        </div>
-
-        {/* Row 3: Consensus Protocol */}
-        <ConsensusProtocol />
-
-        {/* Row 4: Encryption | Blockchain */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <EncryptionEngine encryptedData={encryptedData} loading={loading} />
-          <BlockchainLog txHash={txHash} />
+        {/* Action cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {actions.map((action, i) => {
+            const Icon = action.icon;
+            return (
+              <motion.button
+                key={action.path}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + i * 0.06 }}
+                onClick={() => navigate(action.path)}
+                className="group bg-card border border-border rounded-lg p-5 text-left hover:border-foreground/30 transition-colors"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <Icon className="w-5 h-5 text-foreground" />
+                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                </div>
+                <h3 className="text-sm font-semibold text-foreground mb-1">{action.label}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{action.description}</p>
+              </motion.button>
+            );
+          })}
         </div>
       </div>
     </div>
