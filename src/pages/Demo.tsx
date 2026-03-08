@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import NavHeader from "@/components/dashboard/NavHeader";
-import { CheckCircle, Circle, Loader2 } from "lucide-react";
+import PipelineTracker from "@/components/dashboard/PipelineTracker";
+import { CheckCircle, Loader2 } from "lucide-react";
 
 interface EncryptedData {
   ciphertext: string;
@@ -12,54 +13,63 @@ interface EncryptedData {
 }
 
 const stages = [
-  { label: "IoT Devices Activated", delay: 1000 },
+  { label: "IoT Devices Activated", delay: 1500 },
+  { label: "Neighbor Discovery Complete", delay: 1500 },
   { label: "Cluster Heads Selected", delay: 1500 },
-  { label: "Consensus Achieved", delay: 1500 },
+  { label: "Data Aggregation Complete", delay: 1500 },
+  { label: "Consensus Achieved", delay: 2000 },
   { label: "Post-Quantum Encryption Running", delay: 0 },
-  { label: "Blockchain Transaction Broadcast", delay: 1000 },
+  { label: "Broadcasting Blockchain Transaction", delay: 0 },
+  { label: "Waiting for Network Confirmation", delay: 3000 },
   { label: "Transaction Confirmed", delay: 0 },
 ];
 
 const Demo = () => {
   const [currentStage, setCurrentStage] = useState(-1);
+  const [pipelineStage, setPipelineStage] = useState(-1);
   const [txHash, setTxHash] = useState<string | null>(null);
   const [encryptedData, setEncryptedData] = useState<EncryptedData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
 
-  useEffect(() => {
-    runPipeline();
-  }, []);
+  useEffect(() => { runPipeline(); }, []);
 
   const runPipeline = async () => {
     setRunning(true);
     setError(null);
     setCurrentStage(-1);
+    setPipelineStage(-1);
     setTxHash(null);
     setEncryptedData(null);
 
-    // Stages 0-2: animated delays
-    for (let i = 0; i < 3; i++) {
+    // Stages 0-4: animated delays (maps to pipeline stages 0-4)
+    for (let i = 0; i < 5; i++) {
       await wait(stages[i].delay);
       setCurrentStage(i);
+      setPipelineStage(i);
     }
 
-    // Stage 3: API call
-    setCurrentStage(3);
+    // Stage 5: Encryption (API call) - pipeline stage 5
+    setCurrentStage(5);
+    setPipelineStage(5);
     try {
       const res = await axios.post("http://127.0.0.1:8000/run-demo");
       const { encrypted_payload, tx_hash } = res.data;
       const parsed: EncryptedData = JSON.parse(encrypted_payload);
       setEncryptedData(parsed);
 
-      // Stage 4
-      await wait(stages[4].delay);
-      setCurrentStage(4);
-      setTxHash(tx_hash);
+      // Stage 6: Broadcasting - pipeline stage 6
+      setCurrentStage(6);
+      setPipelineStage(6);
+      await wait(1500);
 
-      // Stage 5
-      await wait(1000);
-      setCurrentStage(5);
+      // Stage 7: Waiting for confirmation
+      setCurrentStage(7);
+      await wait(3000);
+
+      // Stage 8: Confirmed
+      setCurrentStage(8);
+      setTxHash(tx_hash);
     } catch {
       setError("Failed to execute secure IoT transmission.");
     } finally {
@@ -70,44 +80,39 @@ const Demo = () => {
   return (
     <div className="min-h-screen bg-background">
       <NavHeader />
-      <div className="max-w-2xl mx-auto px-6 py-12">
-        <div className="text-center mb-10">
-          <h1 className="text-2xl font-semibold text-foreground mb-2">
-            Secure IoT Pipeline Demo
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Automated post-quantum secure transmission pipeline
-          </p>
+      <div className="max-w-3xl mx-auto px-6 py-8 space-y-6">
+        <div className="text-center mb-4">
+          <h1 className="text-2xl font-semibold text-foreground mb-2">Secure IoT Pipeline Demo</h1>
+          <p className="text-sm text-muted-foreground">Automated post-quantum secure transmission pipeline</p>
         </div>
 
+        <PipelineTracker activeStage={pipelineStage} />
+
         {error && (
-          <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 text-destructive text-sm mb-6">
+          <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 text-destructive text-sm">
             {error}
           </div>
         )}
 
         {/* Progress stages */}
-        <div className="bg-card border border-border rounded-lg p-6 mb-6 shadow-sm">
-          <div className="space-y-4">
+        <div className="bg-card border border-border rounded-lg p-6 shadow-sm">
+          <div className="space-y-3">
             {stages.map((stage, i) => (
               <AnimatePresence key={stage.label}>
                 {i <= currentStage && (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
                     className="flex items-center gap-3"
                   >
                     {i < currentStage ? (
                       <CheckCircle className="w-5 h-5 text-green-400 shrink-0" />
-                    ) : i === currentStage && running ? (
+                    ) : running ? (
                       <Loader2 className="w-5 h-5 text-primary animate-spin shrink-0" />
                     ) : (
                       <CheckCircle className="w-5 h-5 text-green-400 shrink-0" />
                     )}
-                    <span className={`text-sm ${i <= currentStage ? 'text-foreground' : 'text-muted-foreground'}`}>
-                      {stage.label}
-                    </span>
+                    <span className="text-sm text-foreground">{stage.label}</span>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -117,11 +122,8 @@ const Demo = () => {
 
         {/* Encryption output */}
         {encryptedData && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-card border border-border rounded-lg p-6 mb-6 shadow-sm"
-          >
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+            className="bg-card border border-border rounded-lg p-6 shadow-sm">
             <h2 className="text-base font-semibold text-foreground mb-4">Encryption Output</h2>
             <div className="bg-background rounded-lg border border-border p-4 max-h-[200px] overflow-auto">
               {[
@@ -132,9 +134,7 @@ const Demo = () => {
               ].map((f) => (
                 <div key={f.label} className="mb-2 last:mb-0">
                   <div className="text-xs text-muted-foreground mb-1">{f.label}</div>
-                  <div className="font-mono text-xs text-green-400 overflow-x-auto whitespace-nowrap">
-                    {f.value}
-                  </div>
+                  <div className="font-mono text-xs text-green-400 overflow-x-auto whitespace-nowrap">{f.value}</div>
                 </div>
               ))}
             </div>
@@ -143,11 +143,8 @@ const Demo = () => {
 
         {/* Blockchain */}
         {txHash && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-card border border-border rounded-lg p-6 shadow-sm space-y-4"
-          >
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+            className="bg-card border border-border rounded-lg p-6 shadow-sm space-y-4">
             <h2 className="text-base font-semibold text-foreground">Blockchain Transaction</h2>
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
@@ -159,9 +156,7 @@ const Demo = () => {
             </div>
             <div>
               <div className="text-xs text-muted-foreground mb-1">Transaction Hash</div>
-              <div className="font-mono text-xs text-primary bg-background rounded p-3 border border-border break-all">
-                {txHash}
-              </div>
+              <div className="font-mono text-xs text-primary bg-background rounded p-3 border border-border break-all">{txHash}</div>
             </div>
             <a
               href={`https://sepolia.etherscan.io/tx/${txHash}`}
@@ -175,12 +170,10 @@ const Demo = () => {
         )}
 
         {/* Rerun */}
-        {!running && currentStage >= 5 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center mt-8">
-            <button
-              onClick={runPipeline}
-              className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors"
-            >
+        {!running && currentStage >= 8 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
+            <button onClick={runPipeline}
+              className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors">
               Run Again
             </button>
           </motion.div>
