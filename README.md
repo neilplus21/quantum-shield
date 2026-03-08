@@ -1,73 +1,296 @@
-# Welcome to your Lovable project
+# Blockchain-IoT Integration with Extended Proof-of-Luck Consensus and Energy-Aware Clustering for Post-Quantum Security
 
-## Project info
+A research prototype and interactive visualization platform demonstrating a **Blockchain-IoT (BIoT) framework** that integrates energy-aware clustering, an Extended Delegated Proof-of-Luck consensus mechanism, and post-quantum cryptography for secure and scalable IoT networks.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+The project includes an **interactive web dashboard and automated simulation demo** that visualizes the entire system pipeline from IoT device discovery to blockchain logging.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+# Overview
 
-**Use Lovable**
+The rapid growth of Internet-of-Things (IoT) deployments introduces major challenges related to **security, scalability, energy consumption, and trust management**.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Traditional centralized architectures struggle to provide:
 
-Changes made via Lovable will be committed automatically to this repo.
+* tamper-proof data storage
+* fair device coordination
+* energy-efficient communication
+* quantum-resistant security
 
-**Use your preferred IDE**
+This project presents a **Blockchain-IoT framework** that addresses these issues by combining:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Energy-aware clustering
+Extended Delegated Proof-of-Luck consensus
+Post-quantum hybrid encryption
+Smart contract-based blockchain logging
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+The system demonstrates how IoT telemetry can be **securely aggregated, encrypted, validated, and immutably stored on a blockchain network**.
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# System Architecture
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+The architecture integrates multiple layers of distributed systems and cryptography.
 
-# Step 3: Install the necessary dependencies.
-npm i
+Pipeline:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```
+IoT Devices
+   ↓
+Neighbor Discovery
+   ↓
+Energy-Aware Clustering
+   ↓
+Cluster Head Selection (MCDM / WSM)
+   ↓
+Cluster Data Aggregation
+   ↓
+Extended Delegated Proof-of-Luck Consensus
+   ↓
+Post-Quantum Encryption (Kyber-512 + AES-GCM)
+   ↓
+Smart Contract Logging
+   ↓
+Blockchain Storage
+```
+
+The interactive dashboard visually demonstrates each stage.
+
+---
+
+# Key Features
+
+### Energy-Aware Clustering
+
+Cluster heads are selected using a **Multi-Criteria Decision Making (MCDM)** algorithm based on:
+
+* residual energy
+* CPU capability
+* connectivity
+* fairness
+
+This improves network lifetime and balances workload across IoT devices.
+
+---
+
+### Extended Delegated Proof-of-Luck Consensus
+
+A lightweight blockchain consensus designed for **resource-constrained IoT networks**.
+
+Key properties:
+
+* software-based randomness
+* median-based proposer selection
+* PBFT-style committee validation
+* low latency and energy overhead
+
+---
+
+### Post-Quantum Cryptography
+
+The framework integrates **lattice-based cryptography** to protect IoT data against future quantum attacks.
+
+Hybrid encryption pipeline:
+
+```
+Kyber-512 (Key Encapsulation)
+        ↓
+Shared Secret
+        ↓
+AES-256-GCM Encryption
+        ↓
+Encrypted IoT Payload
+```
+
+The encrypted data package includes:
+
+* ciphertext
+* nonce
+* authentication tag
+* Kyber ciphertext
+
+---
+
+### Blockchain Logging
+
+Encrypted payloads are logged to the **Ethereum Sepolia test network** via a smart contract.
+
+This provides:
+
+* tamper-proof data storage
+* decentralized verification
+* transparent audit trails
+
+---
+
+# Interactive Web Platform
+
+The repository includes a **multi-page visualization dashboard** that explains and demonstrates the architecture.
+
+Pages include:
+
+Dashboard
+Live Demo Simulation
+IoT Network Layer
+Clustering Mechanism
+Consensus Protocol
+Post-Quantum Encryption
+Blockchain Logging
+Research Overview
+
+The **Live Demo page automatically runs the full system pipeline**.
+
+---
+
+
+# Tech Stack
+
+### Frontend
+
+React
+Vite
+TailwindCSS
+Framer Motion
+
+### Backend
+
+Python
+FastAPI
+Web3.py
+
+### Blockchain
+
+Ethereum Sepolia Testnet
+Solidity Smart Contract
+Infura RPC
+
+### Cryptography
+
+Kyber-512 (ML-KEM)
+AES-256-GCM
+PyCryptodome
+
+---
+
+# Installation
+
+Clone the repository
+
+```
+git clone https://github.com/neilplus21/quantum-shield.git
+cd quantum-shield
+```
+
+---
+
+# Backend Setup
+
+Install dependencies
+
+```
+cd backend
+pip install -r requirements.txt
+```
+
+Start the FastAPI server
+
+```
+uvicorn api:app --reload
+```
+
+Server runs at
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+# Frontend Setup
+
+Install dependencies
+
+```
+npm install
+```
+
+Run development server
+
+```
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Open the dashboard
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```
+http://localhost:5173
+```
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Demo Workflow
 
-## What technologies are used for this project?
+The automated demo simulates the full distributed system pipeline.
 
-This project is built with:
+Steps:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+1. IoT devices initialize
+2. Neighbor discovery runs
+3. Cluster heads are selected
+4. Sensor data is aggregated
+5. Extended DPoL consensus selects a proposer
+6. IoT payload is encrypted using post-quantum cryptography
+7. Encrypted data is logged to Ethereum blockchain
+8. Transaction hash is displayed
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+# Example Encrypted Payload
 
-## Can I connect a custom domain to my Lovable project?
+```
+{
+  "ciphertext": "...",
+  "iv": "...",
+  "tag": "...",
+  "kem_ciphertext": "..."
+}
+```
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+# Research Contributions
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+• Integration of blockchain and IoT architectures
+• Multi-criteria cluster head selection mechanism
+• Extended Delegated Proof-of-Luck consensus protocol
+• Hybrid post-quantum encryption pipeline
+• Interactive architecture visualization dashboard
+
+---
+
+# Future Work
+
+Potential improvements include:
+
+* deployment on real IoT hardware
+* real-time sensor integration
+* distributed blockchain nodes
+* scalability testing on larger networks
+* integration with additional PQC schemes
+
+---
+
+
+# License
+
+MIT License
+
+---
+
+# Citation
+
+If you use this project in research, please cite the corresponding paper:
+
+```
+Blockchain-IoT Integration with Extended Proof-of-Luck Consensus and Energy-Aware Clustering for Post-Quantum Security
+```
