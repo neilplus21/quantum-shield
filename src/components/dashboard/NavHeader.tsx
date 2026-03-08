@@ -9,10 +9,11 @@ const NavHeader = () => {
   const links = [
     { to: "/", label: "Dashboard" },
     { to: "/demo", label: "Live Demo" },
-    { to: "/iot-network", label: "IoT Network" },
-    { to: "/clustering", label: "Clustering" },
-    { to: "/consensus", label: "Consensus" },
-    { to: "/encryption", label: "Encryption & Blockchain" },
+    { to: "/research", label: "Research" },
+    { to: "/architecture", label: "Architecture" },
+    { to: "/methodology", label: "Methodology" },
+    { to: "/results", label: "Results" },
+    { to: "/encryption", label: "Encryption" },
   ];
 
   return (
