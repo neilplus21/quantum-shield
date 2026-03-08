@@ -5,8 +5,8 @@ const NavHeader = () => {
   const location = useLocation();
 
   const links = [
-    { to: "/", label: "Dashboard" },
-    { to: "/demo", label: "Live Demo" },
+    { to: "/", label: "Live Demo" },
+    { to: "/dashboard", label: "Dashboard" },
   ];
 
   return (
