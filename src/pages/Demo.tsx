@@ -146,29 +146,30 @@ const Demo = () => {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-card border border-border rounded-lg p-6 shadow-sm"
+            className="bg-card border border-border rounded-lg p-6 shadow-sm space-y-4"
           >
-            <h2 className="text-base font-semibold text-foreground mb-4">Blockchain Transaction</h2>
-            <div className="text-xs text-muted-foreground mb-1">Transaction Hash</div>
-            <div className="font-mono text-xs text-foreground bg-background rounded p-2 border border-border truncate mb-4">
-              {txHash}
+            <h2 className="text-base font-semibold text-foreground">Blockchain Transaction</h2>
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+              <span className="text-sm text-green-400">Transaction Confirmed</span>
             </div>
-            <div className="rounded-lg border border-border overflow-hidden mb-4">
-              <iframe
-                src={`https://sepolia.etherscan.io/tx/${txHash}`}
-                title="Etherscan Transaction"
-                className="w-full bg-background"
-                style={{ height: "500px" }}
-                sandbox="allow-scripts allow-same-origin"
-              />
+            <div>
+              <div className="text-xs text-muted-foreground mb-1">Network</div>
+              <div className="text-sm text-foreground">Ethereum Sepolia</div>
+            </div>
+            <div>
+              <div className="text-xs text-muted-foreground mb-1">Transaction Hash</div>
+              <div className="font-mono text-xs text-primary bg-background rounded p-3 border border-border break-all">
+                {txHash}
+              </div>
             </div>
             <a
               href={`https://sepolia.etherscan.io/tx/${txHash}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors"
             >
-              Open in Etherscan
+              View on Etherscan
             </a>
           </motion.div>
         )}
