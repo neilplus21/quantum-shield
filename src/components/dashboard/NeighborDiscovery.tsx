@@ -3,35 +3,45 @@ import { useState, useEffect, useMemo } from "react";
 
 const NeighborDiscovery = () => {
   const [discoveredCount, setDiscoveredCount] = useState(0);
-  const totalPairs = 24;
 
-  const nodes = useMemo(() =>
-    Array.from({ length: 12 }, (_, i) => ({
-      id: i,
-      x: 15 + (i % 4) * 25,
-      y: 15 + Math.floor(i / 4) * 30,
-    })), []);
+  // Scatter nodes in a natural layout
+  const nodes = useMemo(() => {
+    return Array.from({ length: 14 }, (_, i) => {
+      const angle = (i / 14) * Math.PI * 2 + i * 0.5;
+      const radius = 18 + ((i * 13) % 22);
+      return {
+        id: i,
+        x: 50 + Math.cos(angle) * radius,
+        y: 50 + Math.sin(angle) * radius,
+      };
+    });
+  }, []);
 
+  // Only connect nearby nodes (within radius threshold)
   const connections = useMemo(() => {
     const conns: { from: number; to: number }[] = [];
-    nodes.forEach((n, i) => {
-      nodes.forEach((m, j) => {
-        if (j > i) {
-          const dist = Math.hypot(n.x - m.x, n.y - m.y);
-          if (dist < 35) conns.push({ from: i, to: j });
-        }
-      });
-    });
-    return conns.slice(0, totalPairs);
+    const threshold = 28;
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
+        if (dist < threshold) conns.push({ from: i, to: j });
+      }
+    }
+    return conns;
   }, [nodes]);
 
+  // Gradually discover connections
   useEffect(() => {
+    if (connections.length === 0) return;
     const interval = setInterval(() => {
       setDiscoveredCount((p) => {
-        if (p >= connections.length) { clearInterval(interval); return p; }
+        if (p >= connections.length) {
+          clearInterval(interval);
+          return p;
+        }
         return p + 1;
       });
-    }, 120);
+    }, 150);
     return () => clearInterval(interval);
   }, [connections.length]);
 
@@ -43,30 +53,68 @@ const NeighborDiscovery = () => {
     >
       <h2 className="text-lg font-semibold text-foreground mb-1">Neighbor Discovery</h2>
       <div className="flex gap-4 text-xs text-muted-foreground mb-4">
-        <span>Neighbors Detected: <span className="text-foreground">{discoveredCount}</span></span>
-        <span>Connectivity: <span className="text-foreground">{connections.length > 0 ? Math.round((discoveredCount / connections.length) * 100) : 0}%</span></span>
+        <span>
+          Neighbors Detected:{" "}
+          <span className="text-foreground">{discoveredCount}</span>
+        </span>
+        <span>
+          Connectivity:{" "}
+          <span className="text-foreground">
+            {connections.length > 0 ? Math.round((discoveredCount / connections.length) * 100) : 0}%
+          </span>
+        </span>
       </div>
 
       <div className="relative h-[220px] bg-background rounded-lg border border-border overflow-hidden">
+        {/* Connection lines */}
         <svg className="absolute inset-0 w-full h-full">
           {connections.slice(0, discoveredCount).map((c, i) => (
             <motion.line
               key={i}
-              x1={`${nodes[c.from].x}%`} y1={`${nodes[c.from].y}%`}
-              x2={`${nodes[c.to].x}%`} y2={`${nodes[c.to].y}%`}
-              stroke="hsl(217 91% 60% / 0.3)"
+              x1={`${nodes[c.from].x}%`}
+              y1={`${nodes[c.from].y}%`}
+              x2={`${nodes[c.to].x}%`}
+              y2={`${nodes[c.to].y}%`}
+              stroke="hsl(0 0% 35%)"
               strokeWidth="1"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              transition={{ duration: 0.4 }}
+            />
+          ))}
+
+          {/* Data packets moving along discovered connections */}
+          {connections.slice(0, discoveredCount).map((c, i) => (
+            <motion.circle
+              key={`pkt-${i}`}
+              r="2"
+              fill="hsl(0 0% 100%)"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0, 0.8, 0],
+                cx: [`${nodes[c.from].x}%`, `${nodes[c.to].x}%`],
+                cy: [`${nodes[c.from].y}%`, `${nodes[c.to].y}%`],
+              }}
+              transition={{
+                duration: 3,
+                delay: i * 0.3,
+                repeat: Infinity,
+                repeatDelay: 2,
+                ease: "linear",
+              }}
             />
           ))}
         </svg>
+
+        {/* Nodes */}
         {nodes.map((n) => (
-          <div
+          <motion.div
             key={n.id}
-            className="absolute w-4 h-4 rounded-full bg-primary/30 border border-primary/50"
+            className="absolute w-3 h-3 rounded-full border border-muted-foreground bg-muted-foreground/20"
             style={{ left: `${n.x}%`, top: `${n.y}%`, transform: "translate(-50%, -50%)" }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: n.id * 0.05 }}
           />
         ))}
       </div>
