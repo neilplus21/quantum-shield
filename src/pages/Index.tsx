@@ -6,9 +6,10 @@ import { Play, Radio, GitBranch, Vote, Lock, ArrowRight } from "lucide-react";
 
 const actions = [
   { label: "Play Full Demo", description: "Run the entire pipeline automatically", path: "/demo", icon: Play },
-  { label: "Explore IoT Network", description: "View scattered devices and neighbor discovery", path: "/iot-network", icon: Radio },
-  { label: "Explore Clustering", description: "Cluster head selection and data aggregation", path: "/clustering", icon: GitBranch },
-  { label: "Explore Consensus", description: "Extended DPoL consensus protocol", path: "/consensus", icon: Vote },
+  { label: "Research Overview", description: "Abstract, objectives, and key contributions", path: "/research", icon: Radio },
+  { label: "System Architecture", description: "End-to-end pipeline and stage descriptions", path: "/architecture", icon: GitBranch },
+  { label: "Methodology", description: "Simulation setup and algorithm comparison", path: "/methodology", icon: Vote },
+  { label: "Results & Analysis", description: "Network lifetime, fairness, and consensus metrics", path: "/results", icon: Lock },
   { label: "Encryption & Blockchain", description: "Post-quantum encryption and blockchain logging", path: "/encryption", icon: Lock },
 ];
 
