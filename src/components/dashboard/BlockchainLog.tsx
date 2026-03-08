@@ -8,13 +8,6 @@ interface BlockchainLogProps {
 
 const BlockchainLog = ({ txHash }: BlockchainLogProps) => {
   const [copied, setCopied] = useState(false);
-  const [status, setStatus] = useState<"broadcasting" | "waiting" | "confirmed">("broadcasting");
-
-  useState(() => {
-    if (txHash) {
-      setStatus("confirmed");
-    }
-  });
 
   const copyHash = async () => {
     if (!txHash) return;
