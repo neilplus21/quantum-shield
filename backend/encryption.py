@@ -1,17 +1,17 @@
 import json
+import os
 import base64
 from datetime import datetime
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from kyber_py.ml_kem import ML_KEM_512
 from web3 import Web3
-pvtkey = "8f7fd917a028a2bf4673094ee62a434b8ec2ba94d21983569fb1292fba7dd33f"
 
 #details
-CONTRACT_ADDRESS = "0xC4b1e6183407a8f81749Ac4c74c74818a24Aa86b"
-SENDER_ADDRESS = "0x337d49badb556634bAe34C2D6309c7F4B6ae4B7b"
-PRIVATE_KEY = pvtkey
-RPC_URL = "https://sepolia.infura.io/v3/d24877de3f4540718a36516376513dec"
+PRIVATE_KEY = os.getenv("pvtkey")
+SENDER_ADDRESS = os.getenv("SENDER_ADDRESS")
+RPC_URL = os.getenv("RPC_URL")
+CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
 
 # ABI
 ABI = [
