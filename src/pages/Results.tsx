@@ -15,12 +15,12 @@ const Section = ({ title, icon: Icon, children, delay = 0 }: { title: string; ic
 );
 
 const lifetimeData = [
-  { algorithm: "LEACH", lifetime: "~120 rounds", notes: "Early node death due to random CH selection" },
-  { algorithm: "CHEF", lifetime: "~135 rounds", notes: "Fuzzy logic improves over LEACH" },
-  { algorithm: "HEED", lifetime: "~140 rounds", notes: "Better energy distribution" },
-  { algorithm: "DEEC", lifetime: "~145 rounds", notes: "Heterogeneous energy awareness" },
-  { algorithm: "K-Means", lifetime: "~165 rounds", notes: "Distance-optimized clusters" },
-  { algorithm: "Custom MCDM/WSM", lifetime: "~175 rounds", notes: "Best balance of energy and fairness" },
+  { algorithm: "LEACH", lifetime: "~24 rounds"},
+  { algorithm: "CHEF", lifetime: "~36 rounds"},
+  { algorithm: "HEED", lifetime: "~23 rounds"},
+  { algorithm: "DEEC", lifetime: "~28 rounds"},
+  { algorithm: "K-Means", lifetime: "~37 rounds"},
+  { algorithm: "Custom MCDM/WSM", lifetime: "~35 rounds"},
 ];
 
 const Results = () => (
@@ -45,7 +45,6 @@ const Results = () => (
               <tr className="border-b border-border">
                 <th className="text-left py-2 text-foreground font-medium">Algorithm</th>
                 <th className="text-left py-2 text-foreground font-medium">Lifetime</th>
-                <th className="text-left py-2 text-foreground font-medium">Notes</th>
               </tr>
             </thead>
             <tbody>
@@ -53,14 +52,14 @@ const Results = () => (
                 <tr key={i} className="border-b border-border/50">
                   <td className="py-2 font-mono text-xs text-foreground">{row.algorithm}</td>
                   <td className="py-2 text-muted-foreground">{row.lifetime}</td>
-                  <td className="py-2 text-muted-foreground">{row.notes}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         {/* Simple bar visualization */}
-        <div className="mt-6 space-y-2">
+        
+        {/* <div className="mt-6 space-y-2">
           {lifetimeData.map((row, i) => {
             const pct = parseInt(row.lifetime.replace(/\D/g, "")) / 200 * 100;
             return (
@@ -78,21 +77,21 @@ const Results = () => (
               </div>
             );
           })}
-        </div>
+        </div> */}
       </Section>
 
       {/* Fairness */}
       <Section title="Fairness Metrics" icon={BarChart3} delay={0.15}>
         <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
-          <p>Fairness is evaluated using Jain's Fairness Index, measuring how evenly cluster head roles are distributed across nodes over the simulation period.</p>
+          <p>Fairness is evaluated by measuring how evenly cluster head roles are distributed across nodes over the simulation period.</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
             {[
-              { alg: "LEACH", score: "0.72" },
-              { alg: "CHEF", score: "0.78" },
-              { alg: "HEED", score: "0.81" },
-              { alg: "DEEC", score: "0.83" },
-              { alg: "K-Means", score: "0.88" },
-              { alg: "MCDM/WSM", score: "0.91" },
+              { alg: "LEACH", score: "1.173" },
+              { alg: "CHEF", score: "1.962" },
+              { alg: "HEED", score: "1.627" },
+              { alg: "DEEC", score: "1.701" },
+              { alg: "K-Means", score: "1.970" },
+              { alg: "MCDM/WSM", score: "1.946" },
             ].map((item, i) => (
               <div key={i} className="bg-secondary rounded-lg p-3 text-center">
                 <p className="font-mono text-xs text-muted-foreground">{item.alg}</p>

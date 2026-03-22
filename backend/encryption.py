@@ -6,6 +6,8 @@ from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from kyber_py.ml_kem import ML_KEM_512
 from web3 import Web3
+from dotenv import load_dotenv
+load_dotenv()
 
 #details
 PRIVATE_KEY = os.getenv("pvtkey")
@@ -60,7 +62,8 @@ def encrypt_iot_data(data):
 
 def send_transaction(receiver, encrypted_payload):
     w3 = Web3(Web3.HTTPProvider(RPC_URL))
-    assert w3.is_connected(), "Web3 is not connected"
+    if not w3.is_connected():
+        raise Exception("Ethereum RPC connection failed")
 
     contract = w3.eth.contract(address=Web3.to_checksum_address(CONTRACT_ADDRESS), abi=ABI)
     nonce = w3.eth.get_transaction_count(SENDER_ADDRESS)
